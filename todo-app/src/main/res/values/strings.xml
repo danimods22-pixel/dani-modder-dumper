@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My To-Do</string>
+    <string name="add_todo">Add Todo</string>
+    <string name="delete_todo">Delete Todo</string>
+</resources>
