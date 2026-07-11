@@ -1,16 +1,16 @@
 package com.dani.modder;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,11 +61,34 @@ public class MainActivity extends AppCompatActivity {
         // Load installed games
         loadInstalledApps();
 
-        // Button listeners
-        attachBtn.setOnClickListener(v -> attachFrida());
-        dumpBtn.setOnClickListener(v -> dumpMemory());
-        searchBtn.setOnClickListener(v -> showSearchDialog());
-        exportBtn.setOnClickListener(v -> exportLogs());
+        // Button listeners - tanpa lambda
+        attachBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attachFrida();
+            }
+        });
+
+        dumpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dumpMemory();
+            }
+        });
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSearchDialog();
+            }
+        });
+
+        exportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exportLogs();
+            }
+        });
     }
 
     private void createDumpDirectory() {
@@ -82,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadInstalledApps() {
         PackageManager pm = getPackageManager();
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        ArrayList<String> appNames = new ArrayList<>();
+        ArrayList<String> appNames = new ArrayList<String>();
 
         for (ApplicationInfo app : packages) {
             if ((app.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
@@ -90,12 +113,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, appNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, appNames);
         appsListView.setAdapter(adapter);
-        appsListView.setOnItemClickListener((parent, view, position, id) -> {
-            String selected = (String) parent.getItemAtPosition(position);
-            processInput.setText(selected);
-            log("Selected: " + selected);
+        appsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selected = (String) parent.getItemAtPosition(position);
+                processInput.setText(selected);
+                log("Selected: " + selected);
+            }
         });
     }
 
@@ -110,14 +136,29 @@ public class MainActivity extends AppCompatActivity {
         log("Target: " + processName);
         log("Attaching Frida...");
         
-        new Thread(() -> {
-            try {
-                String result = fridaAttacher.attachFrida(processName);
-                runOnUiThread(() -> log(result));
-            } catch (Exception e) {
-                runOnUiThread(() -> log("✗ Error: " + e.getMessage()));
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String result = fridaAttacher.attachFrida(processName);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            log(result);
+                        }
+                    });
+                } catch (Exception e) {
+                    final String error = e.getMessage();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            log("✗ Error: " + error);
+                        }
+                    });
+                }
             }
-        }).start();
+        });
+        thread.start();
     }
 
     private void dumpMemory() {
@@ -130,14 +171,29 @@ public class MainActivity extends AppCompatActivity {
         log("\n[MEMORY DUMP]");
         log("Searching libgame.so...");
         
-        new Thread(() -> {
-            try {
-                String result = libDumper.dumpLibrary(processName, DUMP_DIR);
-                runOnUiThread(() -> log(result));
-            } catch (Exception e) {
-                runOnUiThread(() -> log("✗ Error: " + e.getMessage()));
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String result = libDumper.dumpLibrary(processName, DUMP_DIR);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            log(result);
+                        }
+                    });
+                } catch (Exception e) {
+                    final String error = e.getMessage();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            log("✗ Error: " + error);
+                        }
+                    });
+                }
             }
-        }).start();
+        });
+        thread.start();
     }
 
     private void showSearchDialog() {
@@ -147,13 +203,16 @@ public class MainActivity extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.search_dialog, null);
         builder.setView(dialogView);
 
-        EditText searchValue = dialogView.findViewById(R.id.searchValue);
-        EditText searchType = dialogView.findViewById(R.id.searchType);
+        final EditText searchValue = dialogView.findViewById(R.id.searchValue);
+        final EditText searchType = dialogView.findViewById(R.id.searchType);
 
-        builder.setPositiveButton("Search", (dialog, which) -> {
-            String value = searchValue.getText().toString().trim();
-            String type = searchType.getText().toString().trim();
-            searchInMemory(value, type);
+        builder.setPositiveButton("Search", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String value = searchValue.getText().toString().trim();
+                String type = searchType.getText().toString().trim();
+                searchInMemory(value, type);
+            }
         });
         builder.setNegativeButton("Cancel", null);
         builder.show();
@@ -164,14 +223,29 @@ public class MainActivity extends AppCompatActivity {
         log("Type: " + type + " | Value: " + value);
         log("Searching...");
         
-        new Thread(() -> {
-            try {
-                String result = memorySearcher.search(value, type);
-                runOnUiThread(() -> log(result));
-            } catch (Exception e) {
-                runOnUiThread(() -> log("✗ Error: " + e.getMessage()));
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String result = memorySearcher.search(value, type);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            log(result);
+                        }
+                    });
+                } catch (Exception e) {
+                    final String error = e.getMessage();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            log("✗ Error: " + error);
+                        }
+                    });
+                }
             }
-        }).start();
+        });
+        thread.start();
     }
 
     private void exportLogs() {
