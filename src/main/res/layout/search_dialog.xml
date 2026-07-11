@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#121212">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Type (int/float/string):"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/searchType"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#1E1E1E"
+        android:hint="int, float, or string"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#888888"
+        android:paddingHorizontal="12dp"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Value to Search:"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/searchValue"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#1E1E1E"
+        android:hint="Enter value to search"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#888888"
+        android:paddingHorizontal="12dp" />
+
+</LinearLayout>

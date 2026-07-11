@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#121212"
+    android:padding="16dp">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DANI MODDER"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="#00FF00"
+        android:textAlignment="center"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="monospace" />
+
+    <!-- Process Selection -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Target Process:"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/processInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#1E1E1E"
+        android:hint="Select from list below"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#888888"
+        android:paddingHorizontal="12dp"
+        android:enabled="false"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Apps List -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Installed Applications:"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:layout_marginBottom="8dp" />
+
+    <ListView
+        android:id="@+id/appsListView"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="#1E1E1E"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Control Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:spacing="8dp"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/attachBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="ATTACH"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:background="@drawable/button_glow"
+            android:layout_marginEnd="4dp" />
+
+        <Button
+            android:id="@+id/dumpBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="DUMP"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:background="@drawable/button_glow"
+            android:layout_marginEnd="4dp" />
+
+        <Button
+            android:id="@+id/searchBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="SEARCH"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:background="@drawable/button_glow"
+            android:layout_marginEnd="4dp" />
+
+        <Button
+            android:id="@+id/exportBtn"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="EXPORT"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:background="@drawable/button_glow" />
+
+    </LinearLayout>
+
+    <!-- Log View -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Activity Log:"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:layout_marginBottom="8dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#0A0A0A"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/logView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#00FF00"
+            android:textSize="11sp"
+            android:padding="12dp"
+            android:fontFamily="monospace"
+            android:text="Ready to start..." />
+
+    </ScrollView>
+
+</LinearLayout>

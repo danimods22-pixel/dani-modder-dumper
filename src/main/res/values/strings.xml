@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dani Modder</string>
+    <string name="attach_frida">Attach Frida</string>
+    <string name="dump_memory">Dump Memory</string>
+    <string name="search_memory">Search Memory</string>
+    <string name="export_log">Export Log</string>
+</resources>
